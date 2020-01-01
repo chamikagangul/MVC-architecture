@@ -9,6 +9,7 @@ class Users  extends Model{
     $this->_sessionName = CURRENT_USER_SESSION_NAME;
     $this->_cookieName = REMEMBER_ME_COOKIE_NAME;
     $this->_softDelete = true;
+
     if($user!=''){
       if(is_int($user)){
         $u = $this->_db->findFirst('users',['conditions'=>'id=?','bind'=>[$user]]);
@@ -28,7 +29,7 @@ class Users  extends Model{
     return $user;
   }
 
-  public static function currentLoggedInUser(){
+  public static function currentLogedInUser(){
     if(!isset(self::$currentLoggedUser) && Session::exists(CURRENT_USER_SESSION_NAME)) {
       $U = new Users((int) Session::get(CURRENT_USER_SESSION_NAME));
       self::$currentLoggedUser = $U;
@@ -50,20 +51,19 @@ class Users  extends Model{
   }
 
   public function loginUserFromCookie(){
-    $user_session_model = new UserSessions();
-    $user_session = $user_session_model->findFirst([
-      'conditions'=> "user_agent =? AND session = ?",
-      'bind' =>[Session::uagent_no_version(),Cookie::get(REMEMBER_ME_COOKIE_NAME)]
-    ]);
-    if($user_session->user_id !=''){
-      $user = new self($user_session_model);
+    $userSession = UserSessions::getFromCookie();
+
+    if($userSession->user_id !=''){
+      $user = new self($userSession->user_id);
+    }if($user){
+      $user->login();
     }
-    $user->login();
+
     return $user;
   }
   public function logout(){
-    $user_agent = Session::uagent_no_version();
-    $this->_db->query("DELETE FROM user_sessions WHERE user_id=? AND user_agent=?",[$this->id,$user_agent]);
+    $userSession = UserSessions::getFromCookie();
+    if($userSession) $userSession->delete();
     Session::delete(CURRENT_USER_SESSION_NAME);
     if(Cookie::exists(REMEMBER_ME_COOKIE_NAME)){
       Cookie::delete(REMEMBER_ME_COOKIE_NAME);
