@@ -30,4 +30,5 @@ if(!(Session::exists(CURRENT_USER_SESSION_NAME)) && Cookie::exists(REMEMBER_ME_C
 }
 
 //Route the request
+dnd("chamika");
 Router::route($url);
