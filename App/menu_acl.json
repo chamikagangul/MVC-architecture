@@ -1,0 +1,15 @@
+{
+    "Home" : "home",
+    "Tools" : {
+        "My Tools" :"tools",
+        "tool 1" : "tools/first",
+        "tool 2" : "tools/second",
+        "Seperator" : "",
+        "Tools 3" : "tool/three"
+    },
+    "Contacts" : {
+        "My Contacts" : "MyC"
+    },
+    "Google" : "http://www."
+
+}
