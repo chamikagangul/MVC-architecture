@@ -66,7 +66,7 @@ class Validate{
 
       }
     }
-    if(empty($_errors)){
+    if(empty($this->_errors)){
       $this->_passed = true;
     }
     return $this;
@@ -74,6 +74,7 @@ class Validate{
 
   public function addError($error){
     $this->_errors[] = $error;
+    
     if(empty($this->_errors)){
       $this->_passed = true;
     }else{
@@ -94,7 +95,7 @@ class Validate{
     foreach ($this->_errors as $error) {
       if(is_array($error)){
         $html.="<li class='text-danger'>".$error[0]."</li>";
-        $html.="<script>jQuery('document').ready(function(){jQuery('#".$error[1]."').parent().closest('div').addClass('has-error');});</script>";
+        $html.="<script>jQuery('document').ready(function(){jQuery('#".$error[1]."').parent().closest('div').addClass('red');});</script>";
       }else{
         $html.="<li class='text-danger'>".$error." </li>";
       }
